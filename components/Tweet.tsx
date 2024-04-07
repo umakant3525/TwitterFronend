@@ -1,26 +1,44 @@
-import { StyleSheet , Image} from 'react-native';
-import { Text, View } from '@/components/Themed';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
+import { TweetType } from '../types';
+import { Entypo } from '@expo/vector-icons';
+import IconButton from './IconButton';
 
-import { TweetType } from '@/types';
 type TweetProps = {
-  tweet : TweetType
-}
+  tweet: TweetType;
+};
 
-export default function Tweet({tweet} : TweetProps) {
+const Tweet = ({ tweet }: TweetProps) => {
   return (
-    <View style={styles.container}>
-      <Image 
-      src={tweet.user.image}
-      style={styles.userImage} 
-      />
-      <View style={styles.mainContainer}> 
-      <Text style={styles.name} >{tweet.user.name}</Text>
-    <Text style={styles.name}>{tweet.content}</Text>
-    </View>
-    </View>
-  );
-}
+      <Pressable style={styles.container}>
+        <Image src={tweet.user.image} style={styles.userImage} />
 
+        <View style={styles.mainContainer}>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.name}>{tweet.user.name}</Text>
+            <Text style={styles.username}>{tweet.user.username} · 2h</Text>
+            <Entypo
+              name="dots-three-horizontal"
+              size={16}
+              color="gray"
+              style={{ marginLeft: 'auto' }}
+            />
+          </View>
+
+          <Text style={styles.content}>{tweet.content}</Text>
+
+          {tweet.image && <Image src={tweet.image} style={styles.image} />}
+
+          <View style={styles.footer}>
+            <IconButton icon="comment" text={tweet.numberOfComments} />
+            <IconButton icon="retweet" text={tweet.numberOfRetweets} />
+            <IconButton icon="heart" text={tweet.numberOfLikes} />
+            <IconButton icon="chart" text={tweet.impressions || 0} />
+            <IconButton icon="share-apple" />
+          </View>
+        </View>
+      </Pressable>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -38,11 +56,9 @@ const styles = StyleSheet.create({
   mainContainer: {
     marginLeft: 10,
     flex: 1,
-    backgroundColor : 'white'
   },
   name: {
     fontWeight: '600',
-    color : 'black',
   },
   username: {
     color: 'gray',
@@ -67,3 +83,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default Tweet;
